@@ -1,31 +1,30 @@
 package com.kalah;
 
-import java.util.Arrays;
-
+import com.kalah.domain.Player;
+import com.kalah.repository.PlayerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
+@EntityScan(basePackages = {"com.kalah.domain"})
 public class KalahApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(KalahApplication.class, args);
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> {
+    public CommandLineRunner demo(PlayerRepository playerRepository) {
+        return (args) -> {
 
-            System.out.println("Let's inspect the beans provided by Spring Boot:");
-
-            String[] beanNames = ctx.getBeanDefinitionNames();
-            Arrays.sort(beanNames);
-            for (String beanName : beanNames) {
-                System.out.println(beanName);
-            }
+            //save a couple of players
+            playerRepository.save(new Player("alexander", "alexander@bolhuis.com", new BCryptPasswordEncoder().encode("alexander")));
+            playerRepository.save(new Player("irene", "irene@vanderheijden.com",  new BCryptPasswordEncoder().encode("irene")));
 
         };
     }
