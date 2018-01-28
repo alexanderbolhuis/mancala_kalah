@@ -41,8 +41,35 @@ public class PitService {
         return pit;
     }
 
+    public Pit updatePitNumberOfStonesByAmount(Board board, int position, int amount) {
+        Pit pit = getPitByBoardAndPosition(board, position);
+        int currentAmount = pit.getNumberOfStones();
+        int newAmount = currentAmount + amount;
+        pit.setNumberOfStones(newAmount);
+
+        pitRepository.save(pit);
+
+        return pit;
+    }
+
+    public Pit updatePitNumberOfStonesByOne(Board board, int position) {
+        Pit pit = getPitByBoardAndPosition(board, position);
+        int currentAmount = pit.getNumberOfStones();
+        currentAmount++;
+        pit.setNumberOfStones(currentAmount);
+
+        pitRepository.save(pit);
+
+        return pit;
+    }
+
+    public int getPitNumberOfStonesByBoardAndPosition(Board board, int position) {
+        Pit pit = getPitByBoardAndPosition(board, position);
+        return pit.getNumberOfStones();
+    }
+
     public Pit getPitByBoardAndPosition(Board board, int position) {
-        return pitRepository.findByBoardAndPosition();
+        return pitRepository.findByBoardAndPosition(board, position);
     }
 
     public List<Pit> getPitsByBoard(Board board) {
@@ -50,7 +77,7 @@ public class PitService {
     }
 
     public List<Pit> getPitsByBoardOrderedPosition(Board board) {
-        return pitRepository.findByBoard(board);
+        return pitRepository.findByBoardOrderByPositionAsc(board);
     }
 
 }

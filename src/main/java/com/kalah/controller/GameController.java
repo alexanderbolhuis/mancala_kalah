@@ -76,6 +76,8 @@ public class GameController {
     public Game joinGame(@PathVariable Long id) {
         Player player = playerService.getLoggedInUser();
         Game game = gameService.joinGame(player, id);
+        httpSession.setAttribute("gameId", id);
+
         return game;
     }
 

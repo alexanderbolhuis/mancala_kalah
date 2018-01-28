@@ -38,6 +38,6 @@ public class Game {
     @Enumerated(EnumType.STRING)
     private GameState gameState;
 
-    @Column(name = "created", nullable = false)
-    private Date created;
+//    @Column(name = "created", nullable = false)
+//    private Date created;
 }

@@ -27,7 +27,7 @@ public class GameService {
         Game game  = new Game();
         game.setFirstPlayer(player);
         game.setPlayerTurn(player);
-        updateGameState(game, GameState.WAIT_FOR_PLAYER);
+        game.setGameState(GameState.WAIT_FOR_PLAYER);
 
         // Save game
         gameRepository.save(game);
@@ -87,7 +87,9 @@ public class GameService {
     public List<Game> getPlayerGames(Player player) {
         return gameRepository.findByGameState(GameState.IN_PROGRESS)
                 .stream().filter(
-                        game -> game.getFirstPlayer() == player
+                        game -> (game.getFirstPlayer() == player ||
+                                game.getSecondPlayer() == player)
+
                 ).collect(Collectors.toList());
     }
 

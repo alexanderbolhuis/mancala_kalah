@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface PitRepository extends CrudRepository<Pit, Long> {
     List<Pit> findByBoard(Board Board);
-    List<Pit> findByBoardOOrderByPositionAsc(Board Board);
+    List<Pit> findByBoardOrderByPositionAsc(Board Board);
     Pit findByBoardAndPosition(Board board, int position);
 }

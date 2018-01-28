@@ -1,5 +1,6 @@
 package com.kalah.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.kalah.enums.GameState;
 import com.kalah.enums.PitType;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class Pit {
     private int id;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 

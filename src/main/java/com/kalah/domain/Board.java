@@ -1,11 +1,13 @@
 package com.kalah.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,10 +23,11 @@ public class Board {
     private int id;
 
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;
 
     @OneToMany(mappedBy = "board")
-    private Set<Pit> pits;
+    private List<Pit> pits;
 
 }
