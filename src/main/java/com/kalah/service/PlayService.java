@@ -45,11 +45,11 @@ public class PlayService {
         if(isTurn(game, player)) {
             // P1
             if(player == game.getFirstPlayer()) {
-                board = handleFirstPlayerMove(game, player, position);
+                board = handleFirstPlayerMove(game, position);
             }
             // P2
             else {
-                board = handleSecondPlayerMove(game, player, position);
+                board = handleSecondPlayerMove(game, position);
             }
         }
 
@@ -67,7 +67,7 @@ public class PlayService {
         }
     }
 
-    private Board handleFirstPlayerMove(Game game, Player player, int position) {
+    public Board handleFirstPlayerMove(Game game, int position) {
         // Get Board
         Board board = boardService.getBoardByGame(game);
 
@@ -97,7 +97,7 @@ public class PlayService {
         return board;
     }
 
-    private Board handleSecondPlayerMove(Game game, Player player, int position) {
+    public Board handleSecondPlayerMove(Game game, int position) {
         // Get Board
         Board board = boardService.getBoardByGame(game);
 
@@ -113,7 +113,6 @@ public class PlayService {
             boolean isFinished = checkFinished(board);
 
             if(isFinished) {
-                System.out.println("EMPTY");
                 emptyAllPits(board);
                 gameService.updateGameState(game, GameState.FINISHED);
             }
@@ -128,7 +127,7 @@ public class PlayService {
         return board;
     }
 
-    private int sowSeeds(Board board, int position, int upper, boolean skipP1Store) {
+    public int sowSeeds(Board board, int position, int upper, boolean skipP1Store) {
         // Get nr of stones from startPit and empty
         int amount = pitService.getPitNumberOfStonesByBoardAndPosition(board, position);
         pitService.updatePitNumberOfStones(board, position, 0);
@@ -156,7 +155,7 @@ public class PlayService {
         return index;
     }
 
-    private void checkCapture(Board board, int index, int lower, int upper, int store) {
+    public void checkCapture(Board board, int index, int lower, int upper, int store) {
         if(index >= lower && index <= upper
                 && pitService.getPitNumberOfStonesByBoardAndPosition(board, index) == 1) {
             // Capture stones across
@@ -172,7 +171,7 @@ public class PlayService {
         }
     }
 
-    private boolean checkFinished(Board board) {
+    public boolean checkFinished(Board board) {
         boolean isFinished = true;
         for (int i = P1_LOWER_BOUNDARY; i <= P1_UPPER_BOUNDARY; i++) {
             if (pitService.getPitNumberOfStonesByBoardAndPosition(board, i) > 0) {
@@ -190,7 +189,7 @@ public class PlayService {
         return isFinished;
     }
 
-    private void emptyAllPits(Board board) {
+    public void emptyAllPits(Board board) {
         for (int i = P1_LOWER_BOUNDARY; i <= P1_UPPER_BOUNDARY; i++) {
             int tmpAmount = pitService.getPitNumberOfStonesByBoardAndPosition(board, i);
             if (tmpAmount > 0) {
