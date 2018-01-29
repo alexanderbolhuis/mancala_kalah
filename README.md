@@ -2,7 +2,7 @@
 
 Kalah board game in Spring Boot
 
-###Tech Stack
+### Tech Stack
 Tools & Techniques used:
 * Java 1.8
 * PostgreSQL 10.1
@@ -13,7 +13,7 @@ Tools & Techniques used:
 * JUnit/Mockito
 * IntelliJ
 
-###How to run
+### How to run
 Spring Boot will create tables and add users to start playing. 
 
 Setup PostgreSQL:
