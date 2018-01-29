@@ -144,6 +144,7 @@ public class PlayService {
                 // Skip P1 store
                 index = P2_LOWER_BOUNDARY;
             }
+
             // Add stone for every pit
             pitService.updatePitNumberOfStonesByOne(board, index);
 
