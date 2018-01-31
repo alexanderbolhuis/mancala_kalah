@@ -6,21 +6,15 @@ import com.kalah.domain.Player;
 import com.kalah.enums.GameState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class PlayService {
 
-    @Autowired
-    GameService gameService;
-
-    @Autowired
-    PlayerService playerService;
-
-    @Autowired
-    BoardService boardService;
-
-    @Autowired
-    PitService pitService;
+    private GameService gameService;
+    private BoardService boardService;
+    private PitService pitService;
 
     // Game constants
     private static final int NR_OF_PITS = 14;
@@ -32,8 +26,10 @@ public class PlayService {
     private static final int P2_STORE = 14;
 
     @Autowired
-    public PlayService() {
-
+    public PlayService(GameService gameService, BoardService boardService, PitService pitService) {
+        this.gameService = gameService;
+        this.boardService = boardService;
+        this.pitService = pitService;
     }
 
     public boolean isTurn(Game game, Player player) {

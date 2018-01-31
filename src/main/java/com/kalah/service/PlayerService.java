@@ -7,11 +7,13 @@ import com.kalah.security.ContextUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class PlayerService {
 
-    private final PlayerRepository playerRepository;
+    private PlayerRepository playerRepository;
 
     @Autowired
     public PlayerService(PlayerRepository playerRepository) {

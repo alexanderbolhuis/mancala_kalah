@@ -8,7 +8,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -27,14 +26,12 @@ public class PlayServiceTest {
     @Mock
     private GameService gameServiceMock;
 
-    @Mock
-    private PlayerService playerServiceMock;
-
-    @InjectMocks
-    private PlayService playService = new PlayService();
+    private PlayService playService;
 
     @Before
-    public void init() { }
+    public void init() {
+        playService = new PlayService(gameServiceMock, boardServiceMock, pitServiceMock);
+    }
 
     @Test
     public void testIsTurn() {

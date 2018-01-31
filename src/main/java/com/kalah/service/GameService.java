@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class GameService {
 
-    private final GameRepository gameRepository;
+    private GameRepository gameRepository;
 
     @Autowired
     public GameService(GameRepository gameRepository) {
@@ -64,15 +64,15 @@ public class GameService {
         return game;
     }
 
-    // TODO: Check if needed
     public Game updateGameState(Game game, GameState gameState) {
         Game g = getGameById(game.getId());
         g.setGameState(gameState);
 
+        gameRepository.save(g);
+
         return g;
     }
 
-    // TODO: Check Long int cast
     public Game getGameById(Long id) {
         return gameRepository.findOne(id);
     }
