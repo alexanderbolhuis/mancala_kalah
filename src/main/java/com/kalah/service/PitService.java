@@ -6,11 +6,13 @@ import com.kalah.enums.PitType;
 import com.kalah.repository.PitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PitService {
 
     private PitRepository pitRepository;
@@ -70,10 +72,6 @@ public class PitService {
 
     public Pit getPitByBoardAndPosition(Board board, int position) {
         return pitRepository.findByBoardAndPosition(board, position);
-    }
-
-    public List<Pit> getPitsByBoard(Board board) {
-        return pitRepository.findByBoard(board);
     }
 
     public List<Pit> getPitsByBoardOrderedPosition(Board board) {

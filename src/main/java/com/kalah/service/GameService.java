@@ -64,15 +64,15 @@ public class GameService {
         return game;
     }
 
-    // TODO: Check if needed
     public Game updateGameState(Game game, GameState gameState) {
         Game g = getGameById(game.getId());
         g.setGameState(gameState);
 
+        gameRepository.save(g);
+
         return g;
     }
 
-    // TODO: Check Long int cast
     public Game getGameById(Long id) {
         return gameRepository.findOne(id);
     }
