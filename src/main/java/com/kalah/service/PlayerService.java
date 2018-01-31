@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlayerService {
 
-    private final PlayerRepository playerRepository;
+    private PlayerRepository playerRepository;
 
     @Autowired
     public PlayerService(PlayerRepository playerRepository) {

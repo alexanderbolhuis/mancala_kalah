@@ -27,14 +27,12 @@ public class PlayServiceTest {
     @Mock
     private GameService gameServiceMock;
 
-    @Mock
-    private PlayerService playerServiceMock;
-
-    @InjectMocks
-    private PlayService playService = new PlayService();
+    private PlayService playService;
 
     @Before
-    public void init() { }
+    public void init() {
+        playService = new PlayService(gameServiceMock, boardServiceMock, pitServiceMock);
+    }
 
     @Test
     public void testIsTurn() {

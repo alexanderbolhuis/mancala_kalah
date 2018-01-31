@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class GameService {
 
-    private final GameRepository gameRepository;
+    private GameRepository gameRepository;
 
     @Autowired
     public GameService(GameRepository gameRepository) {

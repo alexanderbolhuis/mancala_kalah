@@ -17,8 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/player")
 public class PlayerController {
 
+    private PlayerService playerService;
+
     @Autowired
-    PlayerService playerService;
+    public PlayerController(PlayerService playerService) {
+        this.playerService = playerService;
+    }
 
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

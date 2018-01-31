@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class PitService {
 
-    private final PitRepository pitRepository;
+    private PitRepository pitRepository;
 
     @Autowired
     public PitService(PitRepository pitRepository) {

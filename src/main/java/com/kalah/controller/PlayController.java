@@ -22,25 +22,26 @@ import java.util.List;
 @RequestMapping("/play")
 public class PlayController {
 
-    @Autowired
-    GameService gameService;
+    private GameService gameService;
+    private PlayerService playerService;
+    private BoardService boardService;
+    private PitService pitService;
+    private PlayService playService;
+    private HttpSession httpSession;
+
+    private Logger logger = LoggerFactory.getLogger(PlayController.class);
 
     @Autowired
-    PlayerService playerService;
-
-    @Autowired
-    BoardService boardService;
-
-    @Autowired
-    PitService pitService;
-
-    @Autowired
-    PlayService playService;
-
-    @Autowired
-    HttpSession httpSession;
-
-    Logger logger = LoggerFactory.getLogger(PlayController.class);
+    public PlayController(GameService gameService, PlayerService playerService,
+                          BoardService boardService, PitService pitService,
+                          PlayService playService, HttpSession httpSession) {
+        this.gameService = gameService;
+        this.playerService = playerService;
+        this.boardService = boardService;
+        this.pitService = pitService;
+        this.playService = playService;
+        this.httpSession = httpSession;
+    }
 
     @RequestMapping(value = "/move/{position}", method = RequestMethod.POST)
     public Board doMove(@PathVariable int position) {
