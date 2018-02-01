@@ -21,23 +21,23 @@ import java.util.List;
 @RequestMapping("/game")
 public class GameController {
 
-
-    @Autowired
-    GameService gameService;
-
-    @Autowired
-    PlayerService playerService;
-
-    @Autowired
-    BoardService boardService;
-
-    @Autowired
-    PitService pitService;
-
-    @Autowired
-    HttpSession httpSession;
+    private GameService gameService;
+    private PlayerService playerService;
+    private BoardService boardService;
+    private PitService pitService;
+    private HttpSession httpSession;
 
     Logger logger = LoggerFactory.getLogger(GameController.class);
+
+    @Autowired
+    public GameController(GameService gameService, PlayerService playerService, BoardService boardService,
+                          PitService pitService, HttpSession httpSession) {
+        this.gameService = gameService;
+        this.playerService = playerService;
+        this.boardService = boardService;
+        this.pitService = pitService;
+        this.httpSession = httpSession;
+    }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Game createNewGame() {

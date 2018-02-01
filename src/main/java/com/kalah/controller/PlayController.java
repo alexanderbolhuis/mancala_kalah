@@ -79,11 +79,11 @@ public class PlayController {
     }
 
     @RequestMapping(value = "/board", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Pit> getBoard() {
+    public Board getBoard() {
         Long gameId = (Long) httpSession.getAttribute("gameId");
         Game game = gameService.getGameById(gameId);
         Board board = boardService.getBoardByGame(game);
 
-        return pitService.getPitsByBoardOrderedPosition(board);
+        return board;
     }
 }
