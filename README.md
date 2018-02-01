@@ -33,3 +33,19 @@ Run with maven:
     mvn test
     mvn spring-boot:run
     
+### Use app
+Location:
+
+    localhost:8080
+    
+Login with:
+
+    U: alexander
+    P: alexander
+    
+or with:
+    
+    U: irene
+    P: irene
+    
+    
