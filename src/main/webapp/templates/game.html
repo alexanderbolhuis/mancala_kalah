@@ -1,0 +1,88 @@
+<div class="row">
+    <div class="col-md-6">
+
+        <div class="gameon">
+            <!--<div class="messageContainer" ng-show="game.gameover">-->
+            <!--<div class="winmessage">{{game.winmessage}}<br/> GAME OVER</div>-->
+            <!--</div>-->
+
+            <div class="row text-center">
+                <div class="col-md-2">
+                    <a class="btn btn-info btn-sq-lg" disabled>
+                        Player 02 - <strong>{{gameBoard[14]}}</strong>
+                    </a>
+                </div>
+
+                <div class="col-md-7">
+                    <div class="row center-block">
+                        <a data-ng-click="move(13);" class="btn btn-primary btn-sq-md">
+                            Pit 13 - <strong>{{gameBoard[13]}}</strong>
+                        </a>
+                        <a data-ng-click="move(12);" class="btn btn-primary btn-sq-md">
+                            Pit 12 - <strong>{{gameBoard[12]}}</strong>
+                        </a>
+                        <a data-ng-click="move(11);" class="btn btn-primary btn-sq-md">
+                            Pit 11 - <strong>{{gameBoard[11]}}</strong>
+                        </a>
+                        <a data-ng-click="move(10);" class="btn btn-primary btn-sq-md">
+                            Pit 10 - <strong>{{gameBoard[10]}}</strong>
+                        </a>
+                        <a data-ng-click="move(9);" class="btn btn-primary btn-sq-md">
+                            Pit 09 - <strong>{{gameBoard[9]}}</strong>
+                        </a>
+                        <a data-ng-click="move(8);" class="btn btn-primary btn-sq-md">
+                            Pit 08 - <strong>{{gameBoard[8]}}</strong>
+                        </a>
+                    </div>
+                    <br>
+                    <div class="row center-block">
+                        <a data-ng-click="move(1);" class="btn btn-primary btn-sq-md">
+                            Pit 01 - <strong>{{gameBoard[1]}}</strong>
+                        </a>
+                        <a data-ng-click="move(2);" class="btn btn-primary btn-sq-md">
+                            Pit 02 - <strong>{{gameBoard[2]}}</strong>
+                        </a>
+                        <a data-ng-click="move(3);" class="btn btn-primary btn-sq-md">
+                            Pit 03 - <strong>{{gameBoard[3]}}</strong>
+                        </a>
+                        <a data-ng-click="move(4);" class="btn btn-primary btn-sq-md">
+                            Pit 04 - <strong>{{gameBoard[4]}}</strong>
+                        </a>
+                        <a data-ng-click="move(5);" class="btn btn-primary btn-sq-md">
+                            Pit 05 - <strong>{{gameBoard[5]}}</strong>
+                        </a>
+                        <a data-ng-click="move(6);" class="btn btn-primary btn-sq-md">
+                            Pit 06 - <strong>{{gameBoard[6]}}</strong>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-2 centered">
+                    <a class="btn btn-info btn-sq-lg" disabled>
+                        Player 01 - <strong>{{gameBoard[7]}}</strong>
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="row center-block" style="margin-left: 10px; margin-top: 20px;">
+                <p class="text-info" disabled>
+                    Turn: {{gameTurn.username}}
+                </p>
+            </div>
+            <div class="row center-block" style="margin-left: 10px; margin-top: 20px;">
+                <p class="text-info" disabled>
+                    Score: {{gameScore}}
+                </p>
+            </div>
+            <div class="row center-block" style="margin-left: 10px; margin-top: 20px;">
+                <p class="text-info" disabled>
+                    State: {{gameState}}
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

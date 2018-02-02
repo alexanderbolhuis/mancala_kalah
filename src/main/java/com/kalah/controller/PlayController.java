@@ -43,6 +43,7 @@ public class PlayController {
         this.httpSession = httpSession;
     }
 
+    // TODO: Remove
     @RequestMapping(value = "/move/{position}", method = RequestMethod.POST)
     public Board doMove(@PathVariable int position) {
         // Get info

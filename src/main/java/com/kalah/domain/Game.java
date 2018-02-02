@@ -14,6 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Check(constraints = "game_state = 'IN_PROGRESS' or game_state = 'FINISHED' or game_state = 'WAIT_FOR_PLAYER'")
+@NoArgsConstructor
 @AllArgsConstructor
 public class Game {
 

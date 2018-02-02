@@ -15,6 +15,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Check(constraints = "pit_type = 'HOUSE' or pit_type = 'STORE'")
+@NoArgsConstructor
 @AllArgsConstructor
 public class Pit {
 

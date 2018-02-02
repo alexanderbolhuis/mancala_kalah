@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Player {
 
     public Player(String username, String email, String password) {
