@@ -19,8 +19,7 @@ public class BoardService {
     }
 
     public Board createNewBoard(Game game) {
-        Board board = new Board();
-        board.setGame(game);
+        Board board = new Board(game);
 
         boardRepository.save(board);
 

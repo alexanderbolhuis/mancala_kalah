@@ -57,11 +57,7 @@ public class GameServiceTest {
         Player playerMock = mock(Player.class);
         Player playerOneMock = mock(Player.class);
         Long gameId = new Long(1);
-        Game game = new Game();
-        game.setId(gameId);
-        game.setFirstPlayer(playerOneMock);
-        game.setPlayerTurn(playerOneMock);
-        game.setGameState(GameState.WAIT_FOR_PLAYER);
+        Game game = new Game(gameId, playerOneMock, null, playerOneMock, GameState.WAIT_FOR_PLAYER);
 
         // Test rules
         when(gameRepositoryMock.findOne(gameId)).thenReturn(game);
@@ -84,12 +80,7 @@ public class GameServiceTest {
         Player playerMock = mock(Player.class);
         Player playerOneMock = mock(Player.class);
         Long gameId = new Long(1);
-        Game game = new Game();
-        game.setId(gameId);
-        game.setFirstPlayer(playerOneMock);
-        game.setSecondPlayer(playerMock);
-        game.setPlayerTurn(playerOneMock);
-        game.setGameState(GameState.IN_PROGRESS);
+        Game game = new Game(gameId, playerOneMock, playerMock, playerMock, GameState.IN_PROGRESS);
 
         // Test rules
         when(gameRepositoryMock.findOne(gameId)).thenReturn(game);
@@ -112,12 +103,7 @@ public class GameServiceTest {
         Player playerMock = mock(Player.class);
         Player playerOneMock = mock(Player.class);
         Long gameId = new Long(1);
-        Game game = new Game();
-        game.setId(gameId);
-        game.setFirstPlayer(playerOneMock);
-        game.setSecondPlayer(playerMock);
-        game.setPlayerTurn(playerOneMock);
-        game.setGameState(GameState.IN_PROGRESS);
+        Game game = new Game(gameId, playerOneMock, playerMock, playerOneMock, GameState.IN_PROGRESS);
 
         // Test rules
         when(gameRepositoryMock.findOne(gameId)).thenReturn(game);

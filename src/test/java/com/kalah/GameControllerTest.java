@@ -60,13 +60,8 @@ public class GameControllerTest {
         ObjectMapper objMapper = new ObjectMapper();
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
-
-        Game gameOne = new Game();
         Long gameId = new Long(1);
-        gameOne.setId(gameId);
-        gameOne.setFirstPlayer(player);
-        gameOne.setPlayerTurn(player);
-        gameOne.setGameState(GameState.WAIT_FOR_PLAYER);
+        Game gameOne = new Game(gameId, player, null, player, GameState.WAIT_FOR_PLAYER);
         List<Game> games = new ArrayList<>();
         games.add(gameOne);
 
@@ -87,14 +82,8 @@ public class GameControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-
-        Game gameOne = new Game();
         Long gameId = new Long(1);
-        gameOne.setId(gameId);
-        gameOne.setFirstPlayer(player);
-        gameOne.setPlayerTurn(player);
-        gameOne.setSecondPlayer(playerTwo);
-        gameOne.setGameState(GameState.IN_PROGRESS);
+        Game gameOne = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
         List<Game> games = new ArrayList<>();
         games.add(gameOne);
 
@@ -115,14 +104,8 @@ public class GameControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-
-        Game gameOne = new Game();
         Long gameId = new Long(1);
-        gameOne.setId(gameId);
-        gameOne.setFirstPlayer(player);
-        gameOne.setPlayerTurn(player);
-        gameOne.setSecondPlayer(playerTwo);
-        gameOne.setGameState(GameState.IN_PROGRESS);
+        Game gameOne = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
 
         // Rules
         when(gameService.getGameById(gameId)).thenReturn(gameOne);
@@ -140,22 +123,16 @@ public class GameControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-
-        Game gameCompare = new Game();
-        Long gameTwoId = new Long(1);
-        gameCompare.setId(gameTwoId);
-        gameCompare.setFirstPlayer(player);
-        gameCompare.setPlayerTurn(player);
-        gameCompare.setSecondPlayer(playerTwo);
-        gameCompare.setGameState(GameState.IN_PROGRESS);
+        Long gameId = new Long(1);
+        Game gameOne = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
 
         // Rules
         when(playerService.getLoggedInUser()).thenReturn(playerTwo);
-        when(gameService.joinGame(playerTwo, gameTwoId)).thenReturn(gameCompare);
+        when(gameService.joinGame(playerTwo, gameId)).thenReturn(gameOne);
 
         // Call SUT
         this.mockMvc.perform(post("/game/join/1")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(objMapper.writeValueAsString(gameCompare))));
+                .andExpect(content().string(containsString(objMapper.writeValueAsString(gameOne))));
     }
 
     @Test
@@ -165,24 +142,19 @@ public class GameControllerTest {
         ObjectMapper objMapper = new ObjectMapper();
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
-
-        Game gameCompare = new Game();
-        Long gameTwoId = new Long(1);
-        gameCompare.setId(gameTwoId);
-        gameCompare.setFirstPlayer(player);
-        gameCompare.setPlayerTurn(player);
-        gameCompare.setGameState(GameState.WAIT_FOR_PLAYER);
+        Long gameId = new Long(1);
+        Game gameOne = new Game(gameId, player, null, player, GameState.WAIT_FOR_PLAYER);
 
         Board boardMock = mock(Board.class);
 
         // Rules
         when(playerService.getLoggedInUser()).thenReturn(player);
-        when(gameService.createNewGame(player)).thenReturn(gameCompare);
-        when(boardService.createNewBoard(gameCompare)).thenReturn(boardMock);
+        when(gameService.createNewGame(player)).thenReturn(gameOne);
+        when(boardService.createNewBoard(gameOne)).thenReturn(boardMock);
 
         // Call SUT
         this.mockMvc.perform(post("/game/create")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString(objMapper.writeValueAsString(gameCompare))));
+                .andExpect(content().string(containsString(objMapper.writeValueAsString(gameOne))));
 
         verify(pitService, times(1)).createPit(eq(boardMock), eq(PitType.STORE), eq(7), eq(0));
         verify(pitService, times(1)).createPit(eq(boardMock), eq(PitType.STORE), eq(14), eq(0));

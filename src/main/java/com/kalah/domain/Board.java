@@ -30,4 +30,7 @@ public class Board {
     @OneToMany(mappedBy = "board")
     private List<Pit> pits;
 
+    public Board(Game game) {
+        this.game = game;
+    }
 }

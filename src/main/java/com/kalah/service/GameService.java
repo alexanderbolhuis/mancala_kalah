@@ -24,10 +24,7 @@ public class GameService {
 
     public Game createNewGame(Player player) {
         // Create game and set variables
-        Game game  = new Game();
-        game.setFirstPlayer(player);
-        game.setPlayerTurn(player);
-        game.setGameState(GameState.WAIT_FOR_PLAYER);
+        Game game  = new Game(player, player, GameState.WAIT_FOR_PLAYER);
 
         // Save game
         gameRepository.save(game);

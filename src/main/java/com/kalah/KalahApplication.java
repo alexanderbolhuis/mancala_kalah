@@ -25,7 +25,6 @@ public class KalahApplication {
             //save a couple of players
             playerRepository.save(new Player("alexander", "alexander@bolhuis.com", new BCryptPasswordEncoder().encode("alexander")));
             playerRepository.save(new Player("irene", "irene@vanderheijden.com",  new BCryptPasswordEncoder().encode("irene")));
-
         };
     }
 

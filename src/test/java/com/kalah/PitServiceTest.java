@@ -78,11 +78,7 @@ public class PitServiceTest {
         int position = 10;
         int amount = 4;
 
-        Pit pit = new Pit();
-        pit.setBoard(boardMock);
-        pit.setPitType(PitType.HOUSE);
-        pit.setPosition(position);
-        pit.setNumberOfStones(100);
+        Pit pit = new Pit(boardMock, position, 100, PitType.HOUSE);
 
         // Test rules
         when(pitRepositoryMock.findByBoardAndPosition(boardMock, position)).thenReturn(pit);
@@ -105,11 +101,7 @@ public class PitServiceTest {
         int position = 10;
         int amount = 101;
 
-        Pit pit = new Pit();
-        pit.setBoard(boardMock);
-        pit.setPitType(PitType.HOUSE);
-        pit.setPosition(position);
-        pit.setNumberOfStones(100);
+        Pit pit = new Pit(boardMock, position, 100, PitType.HOUSE);
 
         // Test rules
         when(pitRepositoryMock.findByBoardAndPosition(boardMock, position)).thenReturn(pit);
@@ -132,11 +124,7 @@ public class PitServiceTest {
         int position = 10;
         int amount = 4;
 
-        Pit pit = new Pit();
-        pit.setBoard(boardMock);
-        pit.setPitType(PitType.HOUSE);
-        pit.setPosition(position);
-        pit.setNumberOfStones(100);
+        Pit pit = new Pit(boardMock, position, 100, PitType.HOUSE);
 
         // Test rules
         when(pitRepositoryMock.findByBoardAndPosition(boardMock, position)).thenReturn(pit);
