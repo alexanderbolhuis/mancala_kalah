@@ -23,11 +23,7 @@ public class PitService {
     }
 
     public Pit createPit(Board board, PitType pitType, int position, int nrOfStones) {
-        Pit pit = new Pit();
-        pit.setBoard(board);
-        pit.setPitType(pitType);
-        pit.setPosition(position);
-        pit.setNumberOfStones(nrOfStones);
+        Pit pit = new Pit(board, position, nrOfStones, pitType);
 
         pitRepository.save(pit);
 

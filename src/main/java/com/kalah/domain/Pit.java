@@ -15,7 +15,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Check(constraints = "pit_type = 'HOUSE' or pit_type = 'STORE'")
-@NoArgsConstructor
 @AllArgsConstructor
 public class Pit {
 
@@ -37,4 +36,11 @@ public class Pit {
 
     @Enumerated(EnumType.STRING)
     private PitType pitType;
+
+    public Pit(Board board, int position, int numberOfStones, PitType pitType) {
+        this.board = board;
+        this.position = position;
+        this.numberOfStones = numberOfStones;
+        this.pitType = pitType;
+    }
 }

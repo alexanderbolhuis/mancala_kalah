@@ -14,7 +14,6 @@ import java.util.Date;
 @Getter
 @Setter
 @Check(constraints = "game_state = 'IN_PROGRESS' or game_state = 'FINISHED' or game_state = 'WAIT_FOR_PLAYER'")
-@NoArgsConstructor
 @AllArgsConstructor
 public class Game {
 
@@ -38,6 +37,9 @@ public class Game {
     @Enumerated(EnumType.STRING)
     private GameState gameState;
 
-//    @Column(name = "created", nullable = false)
-//    private Date created;
+    public Game(Player firstPlayer, Player playerTurn, GameState gameState) {
+        this.firstPlayer = firstPlayer;
+        this.playerTurn = playerTurn;
+        this.gameState = gameState;
+    }
 }

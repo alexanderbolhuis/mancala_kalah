@@ -64,46 +64,28 @@ public class PlayControllerTest {
         ObjectMapper objMapper = new ObjectMapper();
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
-
-        Game gameOne = new Game();
         Long gameId = new Long(1);
-        gameOne.setId(gameId);
-        gameOne.setFirstPlayer(player);
-        gameOne.setPlayerTurn(player);
-        gameOne.setGameState(GameState.WAIT_FOR_PLAYER);
+        Game gameOne = new Game(gameId, player, null, player, GameState.WAIT_FOR_PLAYER);
         List<Game> games = new ArrayList<>();
         games.add(gameOne);
 
-        Board board = new Board();
-        board.setGame(gameOne);
+        Board board = new Board(gameOne);
         board.setId(1); // Does not matter here
 
         List<Pit> pits = new ArrayList<>();
 
         for(int i = 1; i <= 2; i++) {
-            Pit p = new Pit();
-            p.setBoard(board);
-            p.setNumberOfStones(0);
-            p.setPosition((i * 7));
-            p.setPitType(PitType.STORE);
+            Pit p = new Pit(board, (i*7), 0, PitType.STORE);
             pits.add(p);
         }
 
         for(int i = 1; i <= 6; i++) {
-            Pit p = new Pit();
-            p.setBoard(board);
-            p.setNumberOfStones(6);
-            p.setPosition(i);
-            p.setPitType(PitType.HOUSE);
+            Pit p = new Pit(board, i, 6, PitType.HOUSE);
             pits.add(p);
         }
 
         for(int i = 8; i <= 13; i++) {
-            Pit p = new Pit();
-            p.setBoard(board);
-            p.setNumberOfStones(6);
-            p.setPosition(i);
-            p.setPitType(PitType.HOUSE);
+            Pit p = new Pit(board, i, 6, PitType.HOUSE);
             pits.add(p);
         }
 
@@ -127,14 +109,8 @@ public class PlayControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-
-        Game gameOne = new Game();
         Long gameId = new Long(1);
-        gameOne.setId(gameId);
-        gameOne.setFirstPlayer(player);
-        gameOne.setPlayerTurn(player);
-        gameOne.setSecondPlayer(playerTwo);
-        gameOne.setGameState(GameState.IN_PROGRESS);
+        Game gameOne  = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
 
         // Rules
         when(playerService.getLoggedInUser()).thenReturn(player);
@@ -153,14 +129,8 @@ public class PlayControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-
-        Game gameOne = new Game();
         Long gameId = new Long(1);
-        gameOne.setId(gameId);
-        gameOne.setFirstPlayer(player);
-        gameOne.setPlayerTurn(player);
-        gameOne.setSecondPlayer(playerTwo);
-        gameOne.setGameState(GameState.IN_PROGRESS);
+        Game gameOne  = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
 
         int score = 991;
 
@@ -182,14 +152,8 @@ public class PlayControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-
-        Game gameOne = new Game();
         Long gameId = new Long(1);
-        gameOne.setId(gameId);
-        gameOne.setFirstPlayer(player);
-        gameOne.setPlayerTurn(player);
-        gameOne.setSecondPlayer(playerTwo);
-        gameOne.setGameState(GameState.IN_PROGRESS);
+        Game gameOne  = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
 
         // Rules
         when(playerService.getLoggedInUser()).thenReturn(player);
@@ -207,46 +171,28 @@ public class PlayControllerTest {
         ObjectMapper objMapper = new ObjectMapper();
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
-
-        Game gameOne = new Game();
         Long gameId = new Long(1);
-        gameOne.setId(gameId);
-        gameOne.setFirstPlayer(player);
-        gameOne.setPlayerTurn(player);
-        gameOne.setGameState(GameState.WAIT_FOR_PLAYER);
+        Game gameOne = new Game(gameId, player, null, player, GameState.WAIT_FOR_PLAYER);
         List<Game> games = new ArrayList<>();
         games.add(gameOne);
 
-        Board board = new Board();
-        board.setGame(gameOne);
+        Board board = new Board(gameOne);
         board.setId(1); // Does not matter here
 
         List<Pit> pits = new ArrayList<>();
 
         for(int i = 1; i <= 2; i++) {
-            Pit p = new Pit();
-            p.setBoard(board);
-            p.setNumberOfStones(0);
-            p.setPosition((i * 7));
-            p.setPitType(PitType.STORE);
+            Pit p = new Pit(board, (i*7), 0, PitType.STORE);
             pits.add(p);
         }
 
         for(int i = 1; i <= 6; i++) {
-            Pit p = new Pit();
-            p.setBoard(board);
-            p.setNumberOfStones(6);
-            p.setPosition(i);
-            p.setPitType(PitType.HOUSE);
+            Pit p = new Pit(board, i, 6, PitType.HOUSE);
             pits.add(p);
         }
 
         for(int i = 8; i <= 13; i++) {
-            Pit p = new Pit();
-            p.setBoard(board);
-            p.setNumberOfStones(6);
-            p.setPosition(i);
-            p.setPitType(PitType.HOUSE);
+            Pit p = new Pit(board, i, 6, PitType.HOUSE);
             pits.add(p);
         }
 

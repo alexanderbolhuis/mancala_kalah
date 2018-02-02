@@ -13,7 +13,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Board {
 
@@ -30,4 +29,7 @@ public class Board {
     @OneToMany(mappedBy = "board")
     private List<Pit> pits;
 
+    public Board(Game game) {
+        this.game = game;
+    }
 }
