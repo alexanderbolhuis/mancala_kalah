@@ -2,6 +2,8 @@
 
 Kalah board game in Spring Boot for Bol.com Tech Assignment
 
+https://en.wikipedia.org/wiki/Kalah
+
 ## Tech Stack
 Tools & Techniques used
 
@@ -56,9 +58,27 @@ Setup db:
     U: irene
     P: irene
     
+### Or with
+    
+    U: ralph
+    P: ralph
+    
+### Or with
+    
+    U: bart
+    P: bart
+    
+### Or with
+    
+    U: thijmen
+    P: thijmen
+    
 ## Potential improvements
 * Improve error handling
 * Move controllers to WebSocket controllers
-* ?
+* Improve Tests + Coverage
+* Add multiple board layouts
+* Frontend design (especially Login Page)
+* More?
  
     
