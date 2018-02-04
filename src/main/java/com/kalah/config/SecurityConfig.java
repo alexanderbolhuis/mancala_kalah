@@ -1,6 +1,7 @@
-package com.kalah.security;
+package com.kalah.config;
 
 import com.kalah.repository.PlayerRepository;
+import com.kalah.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

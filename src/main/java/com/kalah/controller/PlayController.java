@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,22 +29,24 @@ public class PlayController {
     private PitService pitService;
     private PlayService playService;
     private HttpSession httpSession;
+    private SimpMessagingTemplate template;
 
     private Logger logger = LoggerFactory.getLogger(PlayController.class);
 
     @Autowired
     public PlayController(GameService gameService, PlayerService playerService,
                           BoardService boardService, PitService pitService,
-                          PlayService playService, HttpSession httpSession) {
+                          PlayService playService, HttpSession httpSession,
+                          SimpMessagingTemplate template) {
         this.gameService = gameService;
         this.playerService = playerService;
         this.boardService = boardService;
         this.pitService = pitService;
         this.playService = playService;
         this.httpSession = httpSession;
+        this.template = template;
     }
 
-    // TODO: Remove
     @RequestMapping(value = "/move/{position}", method = RequestMethod.POST)
     public Board doMove(@PathVariable int position) {
         // Get info
@@ -51,7 +54,12 @@ public class PlayController {
         Long gameId = (Long) httpSession.getAttribute("gameId");
         Game game = gameService.getGameById(gameId);
 
-        return playService.doMove(game, player, position);
+        Board board = playService.doMove(game, player, position);
+
+        String text = "reload";
+        template.convertAndSend("/update/position/" + gameId.toString(), text);
+
+        return board;
     }
 
     @RequestMapping(value = "/turn", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -26,17 +27,20 @@ public class GameController {
     private BoardService boardService;
     private PitService pitService;
     private HttpSession httpSession;
+    private SimpMessagingTemplate template;
+
 
     Logger logger = LoggerFactory.getLogger(GameController.class);
 
     @Autowired
     public GameController(GameService gameService, PlayerService playerService, BoardService boardService,
-                          PitService pitService, HttpSession httpSession) {
+                          PitService pitService, HttpSession httpSession, SimpMessagingTemplate template) {
         this.gameService = gameService;
         this.playerService = playerService;
         this.boardService = boardService;
         this.pitService = pitService;
         this.httpSession = httpSession;
+        this.template = template;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -69,6 +73,9 @@ public class GameController {
 
         logger.info("new game id: " + httpSession.getAttribute("gameId")+ " stored in session" );
 
+        String text = "reload";
+        template.convertAndSend("/update/lobby", text);
+
         return game;
     }
 
@@ -77,6 +84,11 @@ public class GameController {
         Player player = playerService.getLoggedInUser();
         Game game = gameService.joinGame(player, id);
         httpSession.setAttribute("gameId", id);
+
+        String text = "reload";
+        template.convertAndSend("/update/join/" + game.getId().toString(), text);
+        template.convertAndSend("/update/lobby", text);
+
 
         return game;
     }
