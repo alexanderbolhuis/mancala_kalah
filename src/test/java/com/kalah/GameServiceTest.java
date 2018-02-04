@@ -16,9 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import static org.junit.Assert.*;
-
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class GameServiceTest {
@@ -56,7 +54,7 @@ public class GameServiceTest {
         // Test specific init
         Player playerMock = mock(Player.class);
         Player playerOneMock = mock(Player.class);
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game game = new Game(gameId, playerOneMock, null, playerOneMock, GameState.WAIT_FOR_PLAYER);
 
         // Test rules
@@ -79,7 +77,7 @@ public class GameServiceTest {
         // Test specific init
         Player playerMock = mock(Player.class);
         Player playerOneMock = mock(Player.class);
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game game = new Game(gameId, playerOneMock, playerMock, playerMock, GameState.IN_PROGRESS);
 
         // Test rules
@@ -102,7 +100,7 @@ public class GameServiceTest {
         // Test specific init
         Player playerMock = mock(Player.class);
         Player playerOneMock = mock(Player.class);
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game game = new Game(gameId, playerOneMock, playerMock, playerOneMock, GameState.IN_PROGRESS);
 
         // Test rules

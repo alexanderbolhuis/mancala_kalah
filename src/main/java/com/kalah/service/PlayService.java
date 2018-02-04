@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Class to handle gameplay related actions
+ */
 @Service
 @Transactional
 public class PlayService {
@@ -25,6 +28,13 @@ public class PlayService {
     private static final int P1_STORE = 7;
     private static final int P2_STORE = 14;
 
+    /**
+     * PlayService constructor
+     *
+     * @param gameService @{@link GameService} dependency
+     * @param boardService @{@link BoardService} dependency
+     * @param pitService @{@link PitService} dependency
+     */
     @Autowired
     public PlayService(GameService gameService, BoardService boardService, PitService pitService) {
         this.gameService = gameService;
@@ -32,28 +42,60 @@ public class PlayService {
         this.pitService = pitService;
     }
 
+    /**
+     * Function to check if it is the Player's turn
+     *
+     * @param game @{@link Game} to check for
+     * @param player @{@link Player} to check for
+     * @return boolean of the result
+     */
     public boolean isTurn(Game game, Player player) {
         return game.getPlayerTurn() == player;
     }
 
+    /**
+     * Function to do a Player Move
+     *
+     * @param game @{@link Game} to do move for
+     * @param player @{@link Player} to do move for
+     * @param position to move
+     * @return @{@link Board} after the move
+     */
     public Board doMove(Game game, Player player, int position) {
+        // Get the board
         Board board = boardService.getBoardByGame(game);
+
+        // Check turn
         if(isTurn(game, player)) {
             // P1
             if(player == game.getFirstPlayer()) {
+                // If P1 handle P1 move
                 board = handleFirstPlayerMove(game, position);
             }
             // P2
             else {
+                // If P2 handle P2 move
                 board = handleSecondPlayerMove(game, position);
             }
-        }
+        } // else do nothing
 
         return board;
     }
 
+    /**
+     * Function to retrieve the Score for a Player
+     *
+     * @param game @{@link Game} to retrieve Score for
+     * @param player @{@link Player} to retrieve Score for
+     * @return the Score
+     */
     public int getScore(Game game, Player player) {
+        // Get board
         Board board = boardService.getBoardByGame(game);
+
+        // Score is nr of stones in Store
+
+        // P1
         if(player == game.getFirstPlayer()) {
             return pitService.getPitNumberOfStonesByBoardAndPosition(board, P1_STORE);
         }
@@ -63,6 +105,13 @@ public class PlayService {
         }
     }
 
+    /**
+     * Function to handle a P1 move
+     *
+     * @param game @{@link Game} of the game to move for
+     * @param position to move
+     * @return @{@link Board} after move
+     */
     public Board handleFirstPlayerMove(Game game, int position) {
         // Get Board
         Board board = boardService.getBoardByGame(game);
@@ -70,29 +119,36 @@ public class PlayService {
         // Validate pit position is >= 1 and <= 6
         if(position >= P1_LOWER_BOUNDARY && position <= P1_UPPER_BOUNDARY) {
             // Do Move
-            int index = sowSeeds(board, position, P2_UPPER_BOUNDARY, false);
+            int index = sowStones(board, position, P2_UPPER_BOUNDARY, false);
 
             // Check capture
             checkCapture(board, index, P1_LOWER_BOUNDARY, P1_UPPER_BOUNDARY, P1_STORE);
 
+            // Check turn
+            if (index != P1_STORE) {
+                // Switch turn
+                gameService.switchTurn(game.getSecondPlayer(), game.getId());
+            }
+
             // Check game finished
-            boolean isFinished = checkFinished(board);
+            boolean isFinished = checkFinished(game, board);
 
             if(isFinished) {
                 emptyAllPits(board);
                 gameService.updateGameState(game, GameState.FINISHED);
-            }
-
-            // Check turn
-            if (!isFinished && index != P1_STORE) {
-                // Switch turn
-                gameService.switchTurn(game.getSecondPlayer(), game.getId());
             }
         }
 
         return board;
     }
 
+    /**
+     * Function to handle a P2 move
+     *
+     * @param game @{@link Game} of the game to move for
+     * @param position to move
+     * @return @{@link Board} after move
+     */
     public Board handleSecondPlayerMove(Game game, int position) {
         // Get Board
         Board board = boardService.getBoardByGame(game);
@@ -100,30 +156,39 @@ public class PlayService {
         // Validate pit position is >= 8 and <= 13
         if(position >= P2_LOWER_BOUNDARY && position <= P2_UPPER_BOUNDARY) {
             // Do Move
-            int index = sowSeeds(board, position, P2_STORE, true);
+            int index = sowStones(board, position, P2_STORE, true);
 
             // Check capture
             checkCapture(board, index, P2_LOWER_BOUNDARY, P2_UPPER_BOUNDARY, P2_STORE);
 
+            // Check turn
+            if (index != P2_STORE) {
+                // Switch turn
+                gameService.switchTurn(game.getFirstPlayer(), game.getId());
+            }
+
             // Check game finished
-            boolean isFinished = checkFinished(board);
+            boolean isFinished = checkFinished(game, board);
 
             if(isFinished) {
                 emptyAllPits(board);
                 gameService.updateGameState(game, GameState.FINISHED);
-            }
-
-            // Check turn
-            if (!isFinished && index != P2_STORE) {
-                // Switch turn
-                gameService.switchTurn(game.getFirstPlayer(), game.getId());
             }
         }
 
         return board;
     }
 
-    public int sowSeeds(Board board, int position, int upper, boolean skipP1Store) {
+    /**
+     * Function to sow the stones one by one until empty
+     *
+     * @param board @{@link Board} of the game
+     * @param position To start sowing from
+     * @param upper Max boundary to start at index 1 again
+     * @param skipP1Store boolean if needs to skip P1 store (i.e. is P2)
+     * @return The index of the @{@link com.kalah.domain.Pit} last sowed on
+     */
+    public int sowStones(Board board, int position, int upper, boolean skipP1Store) {
         // Get nr of stones from startPit and empty
         int amount = pitService.getPitNumberOfStonesByBoardAndPosition(board, position);
         pitService.updatePitNumberOfStones(board, position, 0);
@@ -144,6 +209,7 @@ public class PlayService {
             // Add stone for every pit
             pitService.updatePitNumberOfStonesByOne(board, index);
 
+            // Next index, lower amount
             index++;
             amount--;
         }
@@ -152,7 +218,17 @@ public class PlayService {
         return index;
     }
 
+    /**
+     * Function to check for and execute capture of stones across
+     *
+     * @param board @{@link Board} of the game
+     * @param index Of the @{@link com.kalah.domain.Pit} last sowed on
+     * @param lower Lower boundary of current Player's houses
+     * @param upper Upper boundary of current Player's houses
+     * @param store Current Player's store
+     */
     public void checkCapture(Board board, int index, int lower, int upper, int store) {
+        // Check if between boundaries, i.e. landed on his own house and if the house was empty
         if(index >= lower && index <= upper
                 && pitService.getPitNumberOfStonesByBoardAndPosition(board, index) == 1) {
             // Capture stones across
@@ -160,33 +236,56 @@ public class PlayService {
             int amountAcross = pitService.getPitNumberOfStonesByBoardAndPosition(board, indexAcross);
 
             if(amountAcross > 0) {
+                // Empty own house + across
                 pitService.updatePitNumberOfStones(board, indexAcross, 0);
                 pitService.updatePitNumberOfStones(board, index, 0);
 
+                // Add to store
                 pitService.updatePitNumberOfStonesByAmount(board, store, (amountAcross + 1));
             }
         }
     }
 
-    public boolean checkFinished(Board board) {
+    /**
+     * Function to check if the game is finished
+     *
+     * @param game @{@link Game} to check for
+     * @param board @{@link Board} to check for
+     * @return boolean if the game is finished
+     */
+    public boolean checkFinished(Game game, Board board) {
+
         boolean isFinished = true;
-        for (int i = P1_LOWER_BOUNDARY; i <= P1_UPPER_BOUNDARY; i++) {
-            if (pitService.getPitNumberOfStonesByBoardAndPosition(board, i) > 0) {
-                isFinished = false;
-                break;
+
+        if(game.getPlayerTurn() == game.getFirstPlayer()) {
+            // Check P1 houses for stones
+            for (int i = P1_LOWER_BOUNDARY; i <= P1_UPPER_BOUNDARY; i++) {
+                if (pitService.getPitNumberOfStonesByBoardAndPosition(board, i) > 0) {
+                    isFinished = false;
+                    break;
+                }
+            }
+        }
+        else {
+            // Check P2 houses for stones
+            for (int i = P2_LOWER_BOUNDARY; i <= P2_UPPER_BOUNDARY; i++) {
+                if (pitService.getPitNumberOfStonesByBoardAndPosition(board, i) > 0) {
+                    isFinished = false;
+                    break;
+                }
             }
         }
 
-        for (int i = P2_LOWER_BOUNDARY; i <= P2_UPPER_BOUNDARY; i++) {
-            if (pitService.getPitNumberOfStonesByBoardAndPosition(board, i) > 0) {
-                isFinished = false;
-                break;
-            }
-        }
         return isFinished;
     }
 
+    /**
+     * Function to empty all pits when game is finished
+     *
+     * @param board @{@link Board} to empty Pits for
+     */
     public void emptyAllPits(Board board) {
+        // Empty P1 houses
         for (int i = P1_LOWER_BOUNDARY; i <= P1_UPPER_BOUNDARY; i++) {
             int tmpAmount = pitService.getPitNumberOfStonesByBoardAndPosition(board, i);
             if (tmpAmount > 0) {
@@ -195,6 +294,7 @@ public class PlayService {
             }
         }
 
+        // Empty P2 houses
         for (int i = P2_LOWER_BOUNDARY; i <= P2_UPPER_BOUNDARY; i++) {
             int tmpAmount = pitService.getPitNumberOfStonesByBoardAndPosition(board, i);
             if (tmpAmount > 0) {

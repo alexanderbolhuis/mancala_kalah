@@ -4,6 +4,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
 import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
 
+/**
+ * Class for the configuration of WebSocket Security
+ */
 @Configuration
 public class WebSocketSecurityConfig
         extends AbstractSecurityWebSocketMessageBrokerConfigurer {

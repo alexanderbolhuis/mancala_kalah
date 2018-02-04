@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableSet;
 import com.kalah.domain.Player;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+/**
+ * Class for user context
+ */
 public class ContextUser extends org.springframework.security.core.userdetails.User {
 
     private final Player player;

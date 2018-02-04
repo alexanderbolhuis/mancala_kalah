@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * Class to handle @{@link Game} related REST calls
+ */
 @RestController
 @RequestMapping("/game")
 public class GameController {
@@ -30,8 +33,19 @@ public class GameController {
     private SimpMessagingTemplate template;
 
 
-    Logger logger = LoggerFactory.getLogger(GameController.class);
+    private final Logger logger = LoggerFactory.getLogger(GameController.class);
 
+
+    /**
+     * GameController constructor
+     *
+     * @param gameService @{@link GameService} dependency
+     * @param playerService @{@link PlayerService} dependency
+     * @param boardService @{@link BoardService} dependency
+     * @param pitService @{@link PitService} dependency
+     * @param httpSession @{@link HttpSession} dependency
+     * @param template @{@link SimpMessagingTemplate} dependency
+     */
     @Autowired
     public GameController(GameService gameService, PlayerService playerService, BoardService boardService,
                           PitService pitService, HttpSession httpSession, SimpMessagingTemplate template) {
@@ -43,16 +57,22 @@ public class GameController {
         this.template = template;
     }
 
+    /**
+     * REST endpoint to create a new Game
+     *
+     * @return @{@link Game} instance of the newly created game.
+     */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Game createNewGame() {
+        logger.info("Creating new game");
 
-        // Logged player
+        // Retrieve Logged player
         Player player = playerService.getLoggedInUser();
 
-        // Create new game
+        // Create a new game
         Game game = gameService.createNewGame(player);
 
-        // Create Board
+        // Create the game Board
         Board board = boardService.createNewBoard(game);
 
         // Create Pits 6x6 layout + 2 stores
@@ -69,46 +89,85 @@ public class GameController {
             pitService.createPit(board, PitType.HOUSE, i, 6);
         }
 
+        // Store game id in HttpSession
         httpSession.setAttribute("gameId", game.getId());
 
+        // Log the created game
         logger.info("new game id: " + httpSession.getAttribute("gameId")+ " stored in session" );
 
-        String text = "reload";
-        template.convertAndSend("/update/lobby", text);
+        // Notify players in Lobby of update over socket
+        template.convertAndSend("/update/lobby", "update");
 
         return game;
     }
 
+    /**
+     * REST endpoint to join a existing Game
+     *
+     * @param id of the game to join
+     * @return @{@link Game} just joined
+     */
     @RequestMapping(value = "/join/{id}", method = RequestMethod.POST)
     public Game joinGame(@PathVariable Long id) {
+        logger.info("Joining game");
+
+        // Get logged in player
         Player player = playerService.getLoggedInUser();
+
+        // Retrieve game to join and join
         Game game = gameService.joinGame(player, id);
+
+        // Store game id in HttpSession
         httpSession.setAttribute("gameId", id);
 
-        String text = "reload";
-        template.convertAndSend("/update/join/" + game.getId().toString(), text);
-        template.convertAndSend("/update/lobby", text);
+        // Notify lobby and game of status update over socket
+        template.convertAndSend("/update/join/" + game.getId().toString(), "joined");
+        template.convertAndSend("/update/lobby", "updated");
 
+        logger.info("existing game id: " + httpSession.getAttribute("gameId")+ " stored in session" );
 
         return game;
     }
 
+    /**
+     * REST endpoint to get games to join
+     *
+     * @return List of @{@link Game} able to join
+     */
     @RequestMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Game> getGamesToJoin() {
+        logger.info("Getting games to Join");
+
         return gameService.getGamesToJoin(playerService.getLoggedInUser());
     }
 
 
-
+    /**
+     * REST endpoint to get current active games for player
+     *
+     * @return List of @{@link Game} that are active for player
+     */
     @RequestMapping(value = "/player/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Game> getPlayerGames() {
+        logger.info("Getting active game for player");
+
         return gameService.getPlayerGames(playerService.getLoggedInUser());
     }
 
+    /**
+     * REST endpoint to switch to game by id
+     *
+     * @param id of the game to retrieve
+     * @return @{@link Game} of the game to switch to
+     */
     @RequestMapping(value = "/{id}")
     public Game getGameProperties(@PathVariable Long id) {
+        logger.info("Switching to game");
 
+        // Set game id in HttpSession
         httpSession.setAttribute("gameId", id);
+
+        logger.info("existing game id: " + httpSession.getAttribute("gameId")+ " stored in session" );
 
         return gameService.getGameById(id);
     }

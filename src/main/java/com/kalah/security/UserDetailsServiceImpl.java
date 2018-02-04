@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.springframework.util.StringUtils.isEmpty;
 
+/**
+ * Class for User details
+ */
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final PlayerRepository playerRepository;

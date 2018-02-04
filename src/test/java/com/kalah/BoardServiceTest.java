@@ -2,12 +2,8 @@ package com.kalah;
 
 import com.kalah.domain.Board;
 import com.kalah.domain.Game;
-import com.kalah.domain.Player;
-import com.kalah.enums.GameState;
 import com.kalah.repository.BoardRepository;
-import com.kalah.repository.GameRepository;
 import com.kalah.service.BoardService;
-import com.kalah.service.GameService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

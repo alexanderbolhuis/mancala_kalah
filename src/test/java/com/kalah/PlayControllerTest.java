@@ -1,7 +1,6 @@
 package com.kalah;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kalah.controller.GameController;
 import com.kalah.controller.PlayController;
 import com.kalah.domain.Board;
 import com.kalah.domain.Game;
@@ -24,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -50,9 +47,6 @@ public class PlayControllerTest {
     private PlayerService playerService;
 
     @MockBean
-    private PitService pitService;
-
-    @MockBean
     private PlayService playService;
 
     @MockBean
@@ -68,7 +62,7 @@ public class PlayControllerTest {
         ObjectMapper objMapper = new ObjectMapper();
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game gameOne = new Game(gameId, player, null, player, GameState.WAIT_FOR_PLAYER);
         List<Game> games = new ArrayList<>();
         games.add(gameOne);
@@ -113,7 +107,7 @@ public class PlayControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game gameOne  = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
 
         // Rules
@@ -133,7 +127,7 @@ public class PlayControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game gameOne  = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
 
         int score = 991;
@@ -156,7 +150,7 @@ public class PlayControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game gameOne  = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
 
         // Rules
@@ -175,7 +169,7 @@ public class PlayControllerTest {
         ObjectMapper objMapper = new ObjectMapper();
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game gameOne = new Game(gameId, player, null, player, GameState.WAIT_FOR_PLAYER);
         List<Game> games = new ArrayList<>();
         games.add(gameOne);
