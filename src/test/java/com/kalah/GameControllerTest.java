@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,13 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(GameController.class)
@@ -53,6 +54,9 @@ public class GameControllerTest {
     @MockBean
     private PlayerRepository playerRepository;
 
+    @MockBean
+    private SimpMessagingTemplate templateMock;
+
     @Test
     @WithMockUser(username = "alexander", password = "alexander")
     public void testListGamesToJoin() throws Exception {
@@ -60,7 +64,7 @@ public class GameControllerTest {
         ObjectMapper objMapper = new ObjectMapper();
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game gameOne = new Game(gameId, player, null, player, GameState.WAIT_FOR_PLAYER);
         List<Game> games = new ArrayList<>();
         games.add(gameOne);
@@ -82,7 +86,7 @@ public class GameControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game gameOne = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
         List<Game> games = new ArrayList<>();
         games.add(gameOne);
@@ -104,7 +108,7 @@ public class GameControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game gameOne = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
 
         // Rules
@@ -123,7 +127,7 @@ public class GameControllerTest {
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
         Player playerTwo = new Player("irene", "irene@irene.nl", "irene");
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game gameOne = new Game(gameId, player, playerTwo, player, GameState.IN_PROGRESS);
 
         // Rules
@@ -142,7 +146,7 @@ public class GameControllerTest {
         ObjectMapper objMapper = new ObjectMapper();
 
         Player player = new Player("alexander", "alexander@alexander.nl", "alexander");
-        Long gameId = new Long(1);
+        Long gameId = 1L;
         Game gameOne = new Game(gameId, player, null, player, GameState.WAIT_FOR_PLAYER);
 
         Board boardMock = mock(Board.class);

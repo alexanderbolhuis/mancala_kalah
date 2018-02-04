@@ -8,8 +8,10 @@ import lombok.Setter;
 import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
-import java.util.Date;
 
+/**
+ * Game domain class
+ */
 @Entity
 @Getter
 @Setter

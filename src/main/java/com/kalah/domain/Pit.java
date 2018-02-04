@@ -1,7 +1,6 @@
 package com.kalah.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.kalah.enums.GameState;
 import com.kalah.enums.PitType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +10,9 @@ import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
 
+/**
+ * Pit domain class
+ */
 @Entity
 @Getter
 @Setter

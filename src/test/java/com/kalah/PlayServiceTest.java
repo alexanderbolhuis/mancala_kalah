@@ -3,16 +3,16 @@ package com.kalah;
 import com.kalah.domain.Board;
 import com.kalah.domain.Game;
 import com.kalah.domain.Player;
+import com.kalah.enums.GameState;
 import com.kalah.service.*;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayServiceTest {
@@ -103,7 +103,7 @@ public class PlayServiceTest {
         when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(boardMock, position)).thenReturn(6); // return 6 stones
 
         // Call to SUT
-        playService.sowSeeds(boardMock, position, upper, skipP1Store);
+        playService.sowStones(boardMock, position, upper, skipP1Store);
 
         // Verify result/calls
         verify(pitServiceMock, times(1)).updatePitNumberOfStones(boardMock, 1, 0);
@@ -128,7 +128,7 @@ public class PlayServiceTest {
         when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(boardMock, position)).thenReturn(9); // return 6 stones
 
         // Call to SUT
-        playService.sowSeeds(boardMock, position, upper, skipP1Store);
+        playService.sowStones(boardMock, position, upper, skipP1Store);
 
         // Verify result/calls
         verify(pitServiceMock, times(1)).updatePitNumberOfStones(boardMock, 6, 0);
@@ -156,7 +156,7 @@ public class PlayServiceTest {
         when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(boardMock, position)).thenReturn(0); // return 0 stones
 
         // Call to SUT
-        playService.sowSeeds(boardMock, position, upper, skipP1Store);
+        playService.sowStones(boardMock, position, upper, skipP1Store);
 
         // Verify result/calls
         verify(pitServiceMock, times(1)).updatePitNumberOfStones(boardMock, 5, 0);
@@ -176,7 +176,7 @@ public class PlayServiceTest {
         when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(boardMock, position)).thenReturn(6); // return 6 stones
 
         // Call to SUT
-        playService.sowSeeds(boardMock, position, upper, skipP1Store);
+        playService.sowStones(boardMock, position, upper, skipP1Store);
 
         // Verify result/calls
         verify(pitServiceMock, times(1)).updatePitNumberOfStones(boardMock, 8, 0);
@@ -201,7 +201,7 @@ public class PlayServiceTest {
         when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(boardMock, position)).thenReturn(6); // return 6 stones
 
         // Call to SUT
-        playService.sowSeeds(boardMock, position, upper, skipP1Store);
+        playService.sowStones(boardMock, position, upper, skipP1Store);
 
         // Verify result/calls
         verify(pitServiceMock, times(1)).updatePitNumberOfStones(boardMock, 12, 0);
@@ -226,7 +226,7 @@ public class PlayServiceTest {
         when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(boardMock, position)).thenReturn(10); // return 6 stones
 
         // Call to SUT
-        playService.sowSeeds(boardMock, position, upper, skipP1Store);
+        playService.sowStones(boardMock, position, upper, skipP1Store);
 
         // Verify result/calls
         verify(pitServiceMock, times(1)).updatePitNumberOfStones(boardMock, 13, 0);
@@ -255,7 +255,7 @@ public class PlayServiceTest {
         when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(boardMock, position)).thenReturn(0); // return 0 stones
 
         // Call to SUT
-        playService.sowSeeds(boardMock, position, upper, skipP1Store);
+        playService.sowStones(boardMock, position, upper, skipP1Store);
 
         // Verify result/calls
         verify(pitServiceMock, times(1)).updatePitNumberOfStones(boardMock, 10, 0);
@@ -435,12 +435,16 @@ public class PlayServiceTest {
     public void testCheckFinishedTrue() {
         // Test specific init
         Board boardMock = mock(Board.class);
+        Player p1 = new Player("test1", "test@test.nl", "test1");
+        Player p2 = new Player("test2", "test@test.nl", "test2");
+        Game game = new Game(p1, p1, GameState.IN_PROGRESS);
+        game.setSecondPlayer(p2);
 
         // Test rules
         when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(eq(boardMock), anyInt())).thenReturn(0);
 
         // Call to SUT
-        boolean result = playService.checkFinished(boardMock);
+        boolean result = playService.checkFinished(game, boardMock);
 
         // Verify result/calls
         assertTrue(result);
@@ -450,12 +454,16 @@ public class PlayServiceTest {
     public void testCheckFinishedFalse() {
         // Test specific init
         Board boardMock = mock(Board.class);
+        Player p1 = new Player("test1", "test@test.nl", "test1");
+        Player p2 = new Player("test2", "test@test.nl", "test2");
+        Game game = new Game(p1, p1, GameState.IN_PROGRESS);
+        game.setSecondPlayer(p2);
 
         // Test rules
         when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(eq(boardMock), anyInt())).thenReturn(1);
 
         // Call to SUT
-        boolean result = playService.checkFinished(boardMock);
+        boolean result = playService.checkFinished(game, boardMock);
 
         // Verify result/calls
         assertFalse(result);
@@ -465,13 +473,17 @@ public class PlayServiceTest {
     public void testCheckFinishedOneStoneRemaining() {
         // Test specific init
         Board boardMock = mock(Board.class);
+        Player p1 = new Player("test1", "test@test.nl", "test1");
+        Player p2 = new Player("test2", "test@test.nl", "test2");
+        Game game = new Game(p1, p1, GameState.IN_PROGRESS);
+        game.setSecondPlayer(p2);
 
         // Test rules
         when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(eq(boardMock), anyInt())).thenReturn(0,0, 0, 0,
-                0, 0, 0, 0, 0, 1, 0, 0, 0); // return 1 just a single time
+                0, 1, 0, 0, 0, 0, 0, 0, 0); // return 1 just a single time
 
         // Call to SUT
-        boolean result = playService.checkFinished(boardMock);
+        boolean result = playService.checkFinished(game, boardMock);
 
         // Verify result/calls
         assertFalse(result);
@@ -493,7 +505,4 @@ public class PlayServiceTest {
         verify(pitServiceMock, times(12)).updatePitNumberOfStonesByAmount(eq(boardMock), anyInt(), eq(3));
     }
 
-    @After
-    public void tearDown() {
-    }
 }

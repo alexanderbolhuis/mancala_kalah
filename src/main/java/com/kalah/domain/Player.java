@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * Player domain class
+ */
 @Entity
 @Getter
 @Setter

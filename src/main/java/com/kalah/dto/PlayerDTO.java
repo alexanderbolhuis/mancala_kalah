@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Player DTO class
+ */
 @Getter
 @Setter
 @AllArgsConstructor
