@@ -76,6 +76,11 @@ public class PlayController {
         // Notify players of board change
         template.convertAndSend("/update/position/" + gameId.toString(), "moved");
 
+        // Notify lobby if game is finished (to remove from playable games
+        if(game.getGameState() == GameState.FINISHED) {
+            template.convertAndSend("/update/lobby", "update");
+        }
+
         return board;
     }
 

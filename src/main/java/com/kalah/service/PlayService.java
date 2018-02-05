@@ -20,13 +20,13 @@ public class PlayService {
     private PitService pitService;
 
     // Game constants
-    private static final int NR_OF_PITS = 14;
-    private static final int P1_LOWER_BOUNDARY = 1;
-    private static final int P1_UPPER_BOUNDARY = 6;
-    private static final int P2_LOWER_BOUNDARY = 8;
-    private static final int P2_UPPER_BOUNDARY = 13;
-    private static final int P1_STORE = 7;
-    private static final int P2_STORE = 14;
+    public static final int NR_OF_PITS = 14;
+    public static final int P1_LOWER_BOUNDARY = 1;
+    public static final int P1_UPPER_BOUNDARY = 6;
+    public static final int P2_LOWER_BOUNDARY = 8;
+    public static final int P2_UPPER_BOUNDARY = 13;
+    public static final int P1_STORE = 7;
+    public static final int P2_STORE = 14;
 
     /**
      * PlayService constructor
@@ -65,8 +65,8 @@ public class PlayService {
         // Get the board
         Board board = boardService.getBoardByGame(game);
 
-        // Check turn
-        if(isTurn(game, player)) {
+        // Check turn + game is Active
+        if(isTurn(game, player) && game.getGameState() != GameState.FINISHED) {
             // P1
             if(player == game.getFirstPlayer()) {
                 // If P1 handle P1 move
@@ -116,8 +116,11 @@ public class PlayService {
         // Get Board
         Board board = boardService.getBoardByGame(game);
 
+        // Check if pit not empty
+        int nrOfStones = pitService.getPitNumberOfStonesByBoardAndPosition(board, position);
+
         // Validate pit position is >= 1 and <= 6
-        if(position >= P1_LOWER_BOUNDARY && position <= P1_UPPER_BOUNDARY) {
+        if(position >= P1_LOWER_BOUNDARY && position <= P1_UPPER_BOUNDARY && nrOfStones > 0) {
             // Do Move
             int index = sowStones(board, position, P2_UPPER_BOUNDARY, false);
 
@@ -153,8 +156,11 @@ public class PlayService {
         // Get Board
         Board board = boardService.getBoardByGame(game);
 
+        // Check if pit not empty
+        int nrOfStones = pitService.getPitNumberOfStonesByBoardAndPosition(board, position);
+
         // Validate pit position is >= 8 and <= 13
-        if(position >= P2_LOWER_BOUNDARY && position <= P2_UPPER_BOUNDARY) {
+        if(position >= P2_LOWER_BOUNDARY && position <= P2_UPPER_BOUNDARY && nrOfStones > 0) {
             // Do Move
             int index = sowStones(board, position, P2_STORE, true);
 
@@ -257,22 +263,24 @@ public class PlayService {
 
         boolean isFinished = true;
 
+        int lower;
+        int upper;
+
+        // If current Player has no stones left game is Finished
         if(game.getPlayerTurn() == game.getFirstPlayer()) {
-            // Check P1 houses for stones
-            for (int i = P1_LOWER_BOUNDARY; i <= P1_UPPER_BOUNDARY; i++) {
-                if (pitService.getPitNumberOfStonesByBoardAndPosition(board, i) > 0) {
-                    isFinished = false;
-                    break;
-                }
-            }
+            lower = P1_LOWER_BOUNDARY;
+            upper = P1_UPPER_BOUNDARY;
         }
         else {
-            // Check P2 houses for stones
-            for (int i = P2_LOWER_BOUNDARY; i <= P2_UPPER_BOUNDARY; i++) {
-                if (pitService.getPitNumberOfStonesByBoardAndPosition(board, i) > 0) {
-                    isFinished = false;
-                    break;
-                }
+            lower = P2_LOWER_BOUNDARY;
+            upper = P2_UPPER_BOUNDARY;
+        }
+
+        // Check Player houses for stones
+        for (int i = lower; i <= upper; i++) {
+            if (pitService.getPitNumberOfStonesByBoardAndPosition(board, i) > 0) {
+                isFinished = false;
+                break;
             }
         }
 

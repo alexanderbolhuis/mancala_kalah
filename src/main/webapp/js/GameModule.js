@@ -82,7 +82,11 @@ gameModule.controller('playerGamesController', ['$rootScope', '$scope', '$http',
             scope.loadGame = function (id) {
                 console.log(id);
                 rootScope.gameId = id;
-                location.path('/game/' + id);
+                http.get('/game/' + id).success(function (data) {
+                    location.path('/game/' + id);
+                }).error(function (data, status, headers, config) {
+                    location.path('/player/panel');
+                });
             }
         };
 

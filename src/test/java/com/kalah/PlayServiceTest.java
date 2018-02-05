@@ -9,8 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.hamcrest.Matchers.*;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static org.mockito.AdditionalMatchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -432,7 +434,7 @@ public class PlayServiceTest {
     }
 
     @Test
-    public void testCheckFinishedTrue() {
+    public void testCheckFinishedP1True() {
         // Test specific init
         Board boardMock = mock(Board.class);
         Player p1 = new Player("test1", "test@test.nl", "test1");
@@ -451,7 +453,7 @@ public class PlayServiceTest {
     }
 
     @Test
-    public void testCheckFinishedFalse() {
+    public void testCheckFinishedP1False() {
         // Test specific init
         Board boardMock = mock(Board.class);
         Player p1 = new Player("test1", "test@test.nl", "test1");
@@ -470,7 +472,7 @@ public class PlayServiceTest {
     }
 
     @Test
-    public void testCheckFinishedOneStoneRemaining() {
+    public void testCheckFinishedP1OneStoneRemaining() {
         // Test specific init
         Board boardMock = mock(Board.class);
         Player p1 = new Player("test1", "test@test.nl", "test1");
@@ -480,7 +482,65 @@ public class PlayServiceTest {
 
         // Test rules
         when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(eq(boardMock), anyInt())).thenReturn(0,0, 0, 0,
-                0, 1, 0, 0, 0, 0, 0, 0, 0); // return 1 just a single time
+                0, 1, 0); // return 1 just a single time
+
+        // Call to SUT
+        boolean result = playService.checkFinished(game, boardMock);
+
+        // Verify result/calls
+        assertFalse(result);
+    }
+
+    @Test
+    public void testCheckFinishedP2True() {
+        // Test specific init
+        Board boardMock = mock(Board.class);
+        Player p1 = new Player("test1", "test@test.nl", "test1");
+        Player p2 = new Player("test2", "test@test.nl", "test2");
+        Game game = new Game(p1, p2, GameState.IN_PROGRESS);
+        game.setSecondPlayer(p2);
+
+        // Test rules
+        when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(eq(boardMock), gt(7))).thenReturn(0);
+
+        // Call to SUT
+        boolean result = playService.checkFinished(game, boardMock);
+
+        // Verify result/calls
+        assertTrue(result);
+    }
+
+    @Test
+    public void testCheckFinishedP2False() {
+        // Test specific init
+        Board boardMock = mock(Board.class);
+        Player p1 = new Player("test1", "test@test.nl", "test1");
+        Player p2 = new Player("test2", "test@test.nl", "test2");
+        Game game = new Game(p1, p2, GameState.IN_PROGRESS);
+        game.setSecondPlayer(p2);
+
+        // Test rules
+        when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(eq(boardMock), gt(7))).thenReturn(1);
+
+        // Call to SUT
+        boolean result = playService.checkFinished(game, boardMock);
+
+        // Verify result/calls
+        assertFalse(result);
+    }
+
+    @Test
+    public void testCheckFinishedP2OneStoneRemaining() {
+        // Test specific init
+        Board boardMock = mock(Board.class);
+        Player p1 = new Player("test1", "test@test.nl", "test1");
+        Player p2 = new Player("test2", "test@test.nl", "test2");
+        Game game = new Game(p1, p2, GameState.IN_PROGRESS);
+        game.setSecondPlayer(p2);
+
+        // Test rules
+        when(pitServiceMock.getPitNumberOfStonesByBoardAndPosition(eq(boardMock), gt(7))).thenReturn(0,0, 0, 0,
+                0, 1, 0); // return 1 just a single time
 
         // Call to SUT
         boolean result = playService.checkFinished(game, boardMock);
