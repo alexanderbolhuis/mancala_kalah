@@ -4,10 +4,7 @@ import com.kalah.domain.Board;
 import com.kalah.domain.Game;
 import com.kalah.domain.Player;
 import com.kalah.enums.PitType;
-import com.kalah.service.BoardService;
-import com.kalah.service.GameService;
-import com.kalah.service.PitService;
-import com.kalah.service.PlayerService;
+import com.kalah.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,16 +73,16 @@ public class GameController {
         Board board = boardService.createNewBoard(game);
 
         // Create Pits 6x6 layout + 2 stores
-        pitService.createPit(board, PitType.STORE, 7, 0); // store pos 7
-        pitService.createPit(board, PitType.STORE, 14, 0); // store post 14
+        pitService.createPit(board, PitType.STORE, PlayService.P1_STORE, 0); // store pos 7
+        pitService.createPit(board, PitType.STORE, PlayService.P2_STORE, 0); // store post 14
 
         // P1 houses
-        for (int i = 1; i <= 6; i++) {
+        for (int i = PlayService.P1_LOWER_BOUNDARY; i <= PlayService.P1_UPPER_BOUNDARY; i++) {
             pitService.createPit(board, PitType.HOUSE, i, 6);
         }
 
         // P2 houses
-        for (int i = 8; i <= 13; i++) {
+        for (int i = PlayService.P2_LOWER_BOUNDARY; i <= PlayService.P2_UPPER_BOUNDARY; i++) {
             pitService.createPit(board, PitType.HOUSE, i, 6);
         }
 
@@ -121,7 +118,7 @@ public class GameController {
         httpSession.setAttribute("gameId", id);
 
         // Notify lobby and game of status update over socket
-        template.convertAndSend("/update/join/" + game.getId().toString(), "joined");
+        template.convertAndSend("/update/join/" + id, "joined");
         template.convertAndSend("/update/lobby", "updated");
 
         logger.info("existing game id: " + httpSession.getAttribute("gameId")+ " stored in session" );

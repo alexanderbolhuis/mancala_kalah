@@ -12,15 +12,18 @@ Backend:
 * PostgreSQL 10.1
 * Spring Boot
 * Project Lombok
-* Hibernate
 * JUnit/Mockito
 
 Frontend:
 * Angularjs
 * SockJs
 * Stomp
-* JQuery
 * Bootstrap
+
+Tools:
+* IntelliJ
+* Maven 3.5.2
+* Firefox
 
 ## How to run
 Spring Boot will create tables and add users to start playing. 
@@ -37,6 +40,8 @@ Setup db:
     psql
     postgres=# CREATE USER kalah WITH PASSWORD 'kalah'
     postgres=# CREATE DATABASE kalah
+    
+Or use another way for your OS (DB kalah should be created and user kalah with password kalah should also be created). 
     
 ### Run with maven
 
@@ -76,9 +81,11 @@ Setup db:
 ## Potential improvements
 * Improve error handling
 * Move controllers to WebSocket controllers
-* Improve Tests + Coverage
+* Improve Tests + Coverage (DB Integration)
 * Add multiple board layouts
-* Frontend design (especially Login Page)
+* Frontend design
+* Frontend Angular implementation
+    * Store Variables to avoid loss after refresh
 * More?
  
     
